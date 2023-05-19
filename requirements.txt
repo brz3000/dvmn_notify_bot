@@ -1,0 +1,4 @@
+requests
+urllib.parse
+python-dotenv
+python-telegram-bot==13.15
