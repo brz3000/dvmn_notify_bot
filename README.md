@@ -10,7 +10,7 @@
 ## Установка
 Библиотека requests устанавливается командой:
 ```bash
-    pip install requests
+pip install requests
 ```
 Если используется виртуальная среда необходимо воспользоваться командой:
 ```bash
@@ -21,3 +21,8 @@ pipenv install requests
 * DEVMAN_TOKEN - узнать можно в профиле на [https://dvmn.org/api/docs/]
 * TLG_CHAT_ID - id чата с ботом. Узнать можно написав @userinfobot
 * TLG_TOKEN - токен телеграм бота, узнать можно у @BotFather
+
+## Пример запуска скрипта
+```bash
+python main.py
+```
