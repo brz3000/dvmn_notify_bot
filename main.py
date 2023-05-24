@@ -37,14 +37,11 @@ def main():
                                                          f"Преподавателю всё понравилось, "
                                                          f"можно приступать к следующему уроку")
                 timestamp = response.json()["last_attempt_timestamp"]
-            else:
-                timestamp = response.json()["timestamp"]
         except requests.exceptions.ConnectionError:
             sleep(5)
-            pass
         except requests.exceptions.ReadTimeout:
             pass
 
 
 if __name__ == '__main__':
-    print(main())
+    main()
