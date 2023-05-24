@@ -5,14 +5,6 @@ from time import sleep
 import telegram
 
 
-def get_list_of_checks(token):
-    url = 'https://dvmn.org/api/user_reviews/'
-    headers = {"Authorization": f'Token {token}'}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    return response.json()
-
-
 def main():
     load_dotenv()
     token = os.environ['DEVMAN_TOKEN']
