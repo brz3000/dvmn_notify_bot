@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from time import sleep
 import telegram
+from textwrap import dedent
 
 
 def main():
@@ -26,16 +27,16 @@ def main():
                 lesson_url = response.json()['new_attempts'][0]['lesson_url']
                 if response.json()['new_attempts'][0]['is_negative']:
                     send_message = bot.send_message(chat_id=chat_id,
-                                                    text=f"Hello. Преподаватель проверил работу!\n"
-                                                         f"Урок: {lesson}"
-                                                         f"\n{lesson_url}\n"
-                                                         f"К сожалению в работе нашлись ошибки")
+                                                    text=dedent(f'''Hello. Преподаватель проверил работу!
+                                                            Урок: {lesson}.
+                                                            {lesson_url}. 
+                                                            К сожалению в работе нашлись ошибки'''))
                 else:
                     send_message = bot.send_message(chat_id=chat_id,
-                                                    text=f"Hello, Evgen. Преподаватель проверил работу!\n"
-                                                         f"Урок: {lesson}\n"
-                                                         f"Преподавателю всё понравилось, "
-                                                         f"можно приступать к следующему уроку")
+                                                    text=dedent(f'''Hello. Преподаватель проверил работу!
+                                                            Урок: {lesson}
+                                                            Преподавателю всё понравилось,
+                                                            можно приступать к следующему уроку'''))
                 timestamp = response.json()["last_attempt_timestamp"]
         except requests.exceptions.ConnectionError:
             sleep(5)
