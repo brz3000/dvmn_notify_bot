@@ -18,26 +18,29 @@ def main():
         try:
             response = requests.get(url, params=params, headers=headers)
             response.raise_for_status()
-            if response.json()["status"] == 'timeout':
-                timestamp = response.json()["timestamp_to_request"]
-            elif response.json()["status"] == 'found':
+            answer_from_api_devman = response.json()
+            if answer_from_api_devman["status"] == 'timeout':
+                timestamp = answer_from_api_devman["timestamp_to_request"]
+            elif answer_from_api_devman["status"] == 'found':
                 bot = telegram.Bot(token=os.environ['TLG_TOKEN'])
                 chat_id = os.environ['TLG_CHAT_ID']
-                lesson = response.json()['new_attempts'][0]['lesson_title']
-                lesson_url = response.json()['new_attempts'][0]['lesson_url']
-                if response.json()['new_attempts'][0]['is_negative']:
+                lesson = answer_from_api_devman['new_attempts'][0]['lesson_title']
+                lesson_url = answer_from_api_devman['new_attempts'][0]['lesson_url']
+                if answer_from_api_devman['new_attempts'][0]['is_negative']:
                     send_message = bot.send_message(chat_id=chat_id,
-                                                    text=dedent(f'''Hello. Преподаватель проверил работу!
-                                                            Урок: {lesson}.
-                                                            {lesson_url}. 
-                                                            К сожалению в работе нашлись ошибки'''))
+                                                    text=dedent(f'''Hello.
+                                                    Преподаватель проверил работу!
+                                                    Урок: {lesson}.
+                                                    {lesson_url}.
+                                                    К сожалению в работе нашлись ошибки'''))
                 else:
                     send_message = bot.send_message(chat_id=chat_id,
-                                                    text=dedent(f'''Hello. Преподаватель проверил работу!
-                                                            Урок: {lesson}
-                                                            Преподавателю всё понравилось,
-                                                            можно приступать к следующему уроку'''))
-                timestamp = response.json()["last_attempt_timestamp"]
+                                                    text=dedent(f'''Hello.
+                                                    Преподаватель проверил работу!
+                                                    Урок: {lesson}
+                                                    Преподавателю всё понравилось,
+                                                    можно приступать к следующему уроку'''))
+                timestamp = answer_from_api_devman["last_attempt_timestamp"]
         except requests.exceptions.ConnectionError:
             sleep(5)
         except requests.exceptions.ReadTimeout:
