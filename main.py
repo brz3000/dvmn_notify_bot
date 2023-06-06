@@ -4,6 +4,11 @@ from dotenv import load_dotenv
 from time import sleep
 import telegram
 from textwrap import dedent
+import logging
+
+
+logging.basicConfig(level=logging.DEBUG)
+logging.debug('Сообщение уровня DEBUG')
 
 
 def main():
