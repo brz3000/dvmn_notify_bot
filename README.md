@@ -6,7 +6,7 @@
 
 ## Требования
 Для работы должен быть установлен python3. А также необходимо установить библиотеки requests, python-dotenv, 
-python-telegram-bot==13.15. 
+python-telegram-bot==13.15, которые описаны в файле requirements.txt
 Чтобы установить python3 скачайте и ознакомьтесь с инструкцией по установке на сайте [python.org](https://www.python.org/downoloads)
 
 ## Установка
@@ -28,7 +28,8 @@ pip install python-telegram-bot==13.15
 Необходимо чтобы в дирректории проекта был файл .env, в котором содержаться переменные окружения:
 * DEVMAN_TOKEN - узнать можно в профиле на [https://dvmn.org/api/docs/]
 * TLG_CHAT_ID - id чата с ботом. Узнать можно написав @userinfobot
-* TLG_TOKEN - токен телеграм бота, узнать можно у @BotFather
+* TLG_TOKEN_NOTIFY_BOT - токен телеграм бота, который отправляет напоминания, узнать можно у @BotFather.
+* TLG_TOKEN_LOGGER_BOT - токен телеграм бота, который присылает логи, узнать можно у @BotFather.
 
 ## Пример запуска скрипта
 ```bash
