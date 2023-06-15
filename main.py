@@ -7,8 +7,7 @@ from textwrap import dedent
 import logging
 
 
-logging.basicConfig(level=logging.DEBUG)
-logging.debug('Сообщение уровня DEBUG')
+logging.basicConfig(format="%(process)d %(levelname)s %(message)s")
 
 
 def main():
@@ -27,7 +26,7 @@ def main():
             if answer_from_api_devman["status"] == 'timeout':
                 timestamp = answer_from_api_devman["timestamp_to_request"]
             elif answer_from_api_devman["status"] == 'found':
-                bot = telegram.Bot(token=os.environ['TLG_TOKEN'])
+                bot = telegram.Bot(token=os.environ['TLG_TOKEN_NOTIFY_BOT'])
                 chat_id = os.environ['TLG_CHAT_ID']
                 lesson = answer_from_api_devman['new_attempts'][0]['lesson_title']
                 lesson_url = answer_from_api_devman['new_attempts'][0]['lesson_url']
@@ -52,5 +51,30 @@ def main():
             pass
 
 
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
 if __name__ == '__main__':
-    main()
+    load_dotenv()
+    chat_id = os.environ['TLG_CHAT_ID']
+    tg_bot_log = telegram.Bot(token=os.environ['TLG_TOKEN_LOGGER_BOT'])
+    logger = logging.getLogger('new_logger')
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(TelegramLogsHandler(tg_bot_log, chat_id))
+    logger.info('Бот запущен')
+    while True:
+        try:
+            main()
+        except Exception as err:
+            logger.error("Бот упал с ошибкой:")
+            logger.error(err, exc_info=True)
+            sleep(50)
