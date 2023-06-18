@@ -7,11 +7,28 @@ from textwrap import dedent
 import logging
 
 
-logging.basicConfig(format="%(process)d %(levelname)s %(message)s")
+logger = logging.getLogger('new_logger')
+
+
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
 def main():
     load_dotenv()
+    chat_id = os.environ['TLG_CHAT_ID']
+    bot_logger = telegram.Bot(token=os.environ['TLG_TOKEN_LOGGER_BOT'])
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(TelegramLogsHandler(bot_logger, chat_id))
+    logger.info('Бот запущен')
     token = os.environ['DEVMAN_TOKEN']
     headers = {"Authorization": f'Token {token}'}
     timestamp = ''
@@ -51,26 +68,8 @@ def main():
             pass
 
 
-class TelegramLogsHandler(logging.Handler):
-
-    def __init__(self, tg_bot, chat_id):
-        super().__init__()
-        self.chat_id = chat_id
-        self.tg_bot = tg_bot
-
-    def emit(self, record):
-        log_entry = self.format(record)
-        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
-
 
 if __name__ == '__main__':
-    load_dotenv()
-    chat_id = os.environ['TLG_CHAT_ID']
-    tg_bot_log = telegram.Bot(token=os.environ['TLG_TOKEN_LOGGER_BOT'])
-    logger = logging.getLogger('new_logger')
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(TelegramLogsHandler(tg_bot_log, chat_id))
-    logger.info('Бот запущен')
     while True:
         try:
             main()
