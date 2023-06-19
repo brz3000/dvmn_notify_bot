@@ -66,13 +66,11 @@ def main():
             sleep(5)
         except requests.exceptions.ReadTimeout:
             pass
-
-
-if __name__ == '__main__':
-    while True:
-        try:
-            main()
         except Exception as err:
             logger.error("Бот упал с ошибкой:")
             logger.error(err, exc_info=True)
             sleep(50)
+
+
+if __name__ == '__main__':
+    main()
