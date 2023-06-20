@@ -28,7 +28,7 @@ def main():
     bot_logger = telegram.Bot(token=os.environ['TLG_TOKEN_LOGGER_BOT'])
     logger.setLevel(logging.DEBUG)
     logger.addHandler(TelegramLogsHandler(bot_logger, chat_id))
-    logger.info('Бот запущен')
+    logger.info('Бот оповещений запущен')
     token = os.environ['DEVMAN_TOKEN']
     headers = {"Authorization": f'Token {token}'}
     timestamp = ''
@@ -67,7 +67,7 @@ def main():
         except requests.exceptions.ReadTimeout:
             pass
         except Exception as err:
-            logger.error("Бот упал с ошибкой:")
+            logger.error("Бот оповещений упал с ошибкой:")
             logger.error(err, exc_info=True)
             sleep(50)
 
